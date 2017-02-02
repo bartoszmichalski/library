@@ -22,7 +22,7 @@ jQuery(function(){
                         var part4=book.title;
                         var part5='</a> ( ';
                         var part6=book.author;
-                        var part7=' ) <form class="delBook" id="'+book.id+'"><button type=\"submit\" name=\"submit1\" value=\"usuń\">Usuń</button></form><div><form class=\"editBook\" id="'+book.id+'" method=\"put\" action=\"#\"><label>Tytuł:</label><br><input name=\"title_e\" type=\"text\" maxlength=\"255\" value=\"\" size=\"100\"/><br><label>Autor:</label><br><input name=\"author_e\" type=\"text\" maxlength=\"255\" value=\"\" size=\"100\"/><br><button id="'+book.id+'" type=\"submit\" name=\"save\" value=\"save\">Zapisz</button><br></div></li>';
+                        var part7=' ) <form class="delBook" id="'+book.id+'"><button type=\"submit\" name=\"submit1\" value=\"usuń\">Usuń</button></form><div><form class=\"editBook\" id="'+book.id+'" method=\"PUT\" action=\"http://localhost/library/src/rest.php\"><label>Tytuł:</label><br><input name=\"title\" type=\"text\" maxlength=\"255\" value=\"\" size=\"100\"/><br><label>Autor:</label><br><input name=\"author\" type=\"text\" maxlength=\"255\" value=\"\" size=\"100\"/><br><input type="hidden" name=\"id" value="'+book.id+'"><button id="'+book.id+'" type=\"submit\" name=\"save\" value=\"save\">Zapisz</button><br></div></li>';
                         var newLI = jQuery(part1+part2+part3+part4+part5+part6+part7);  
                         newLI.appendTo(UL);
                     });
@@ -49,15 +49,19 @@ jQuery(function(){
                                    var author = jQuery(editBookID).children().eq(6);
                                    author.val(book1.author);
                                    console.log(jQuery('button#'+id));
+                        var datastringtest=jQuery(editBookID).serialize()
+                        console.log(datastringtest);
                                    jQuery('button#'+id).on('click', function (event) {
                                        event.preventDefault(); 
-                                       event.stopPropagation();
-                                       var newTitle = title.val();
-                                        var newAuthor = author.val();
-                                       
-                                        var datastring='id='+id+'&title="'+newTitle+'"&author="'+newAuthor+'"';
+                                       event.stopImmediatePropagation();
+//                                       var newTitle = title.val();
+//                                        var newAuthor = author.val();
+//                                       
+                                        var datastring=jQuery(editBookID).serialize()
+                                                //'id='+id+'&title="'+newTitle+'"&author="'+newAuthor+'"';
 //                                        var datastring1='id='+id+'&title=""&author=""';
                                            console.log(datastring);
+                                         //  setTimeout(function () {1+1}, 10000)
 //                                        var datajson = JSON.stringify({ 'id': id, 'title': newTitle, 'author': newAuthor });
 //                                        console.log(datajson);
                                          jQuery.ajax({
