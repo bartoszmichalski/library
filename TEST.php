@@ -7,7 +7,7 @@
  */
 include_once 'src/connection.php';
 include_once 'src/rest.php';
-require_once 'src/config.php';
+include_once 'src/config.php';
 
 
 
@@ -18,5 +18,13 @@ require_once 'src/config.php';
 
 $book = Book::loadBookFromDBById($mysql, 1);
 var_dump($book);
-        
+
+$book->deleteBookFromDB($mysql);
+     
+            
+
+
+var_dump($book);
+$book = Book::loadBookFromDBById($mysql, 1);
+var_dump($book);
         ?>

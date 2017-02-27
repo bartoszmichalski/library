@@ -1,6 +1,6 @@
 <?php
 //include_once 'connection.php';
-require_once './config.php';
+require_once 'config.php';
 
 class Book implements JsonSerializable {
     public $id;
@@ -74,7 +74,7 @@ class Book implements JsonSerializable {
     }
     public function deleteBookFromDB(mysqli $connection){
         if($this->id != -1){
-            $sql = sprintf("DELETE FROM `books` WHERE id=",$this->id);
+            $sql = sprintf("DELETE FROM `books` WHERE id=%d",$this->id);
             $result = $connection->query($sql);
             if($result == true){
                 $this->id = -1;
@@ -98,9 +98,10 @@ class Book implements JsonSerializable {
                 $loadedBook->author=$row['author'];
                 $books[]=$loadedBook;
             }
+        return $books;    
         }
       // var_dump($books);
-        return $books;
+        return null;
         
     }
     public function jsonSerialize() {
@@ -138,57 +139,54 @@ switch($_SERVER['REQUEST_METHOD']){
     
     case 'POST':
          //   echo 'DODAWANIE POZYCJI';
-        if (isset($_POST['title']) && isset($_POST['author'])) {
+        if (isset($_POST['title']) && isset($_POST['author']) && $_POST['title']!='' && $_POST['author']!='') {
             $title=$_POST['title'];
             $author=$_POST['author'];
             $newBook = new Book();
             $newBook->setTitle($title);
             $newBook->setAuthor($author);
             if ($newBook->saveBookInDB($mysql)) {
-            echo json_encode('OK');
-            header("Location: http://localhost/library/index.html");
+                $books = Book::loadAllBooks($mysql);
+                echo (json_encode($books));
             }
+        } else {
+            $books = Book::loadAllBooks($mysql);
+                echo (json_encode($books));
         }
         break;
     
     case 'GET':
             if(isset($_GET['id'])){   ///wczytywanie książki o podanym id
-               
-            //$book = new Book();
-            //$book->getId($_GET['id']);
-            $loadedBook=Book::loadBookFromDBById($mysql,$_GET['id']);
-            echo json_encode($loadedBook);
-               
-          }else{
-              
-           $books = Book::loadAllBooks($mysql);
-           echo (json_encode($books));
-           }
+                $loadedBook=Book::loadBookFromDBById($mysql,$_GET['id']);
+                echo json_encode($loadedBook);
+            } else {
+            $books = Book::loadAllBooks($mysql);
+            echo (json_encode($books));
+            }
         break;
     
     case 'PUT':
-            echo 'EDYCJA';
+           // echo 'EDYCJA';
             parse_str(file_get_contents("php://input"), $put_vars);
-//            $bookPut= json_parse($put_vars);
-            if (isset($put_vars['id']) && $put_vars['title']!='' && $put_vars['author']!=''){
             $id=$put_vars['id'];
-            $loadedbook = loadBookFromDBById ($mysql,$id);
+            $loadedbook = Book::loadBookFromDBById ($mysql,$id);
             $loadedbook->setTitle($put_vars['title']);
             $loadedbook->setAuthor($put_vars['author']);
             if ($loadedbook->saveBookInDB($mysql)) {
-                echo json_encode('OK');
-                header("Location: http://localhost/library/index.html");
-            
-            }
-            
-             
-                
+                $books = Book::loadAllBooks($mysql);
+                echo (json_encode($books));
             }
         break;
-    
-    
+        
     case 'DELETE':
-            echo 'KASOWANIE';
+            //echo 'KASOWANIE';
+            parse_str(file_get_contents("php://input"), $del_vars);
+            $id=$del_vars['id'];
+            $delbook = Book::loadBookFromDBById ($mysql,$id);
+            if ($delbook->deleteBookFromDB($mysql)) {
+                $books = Book::loadAllBooks($mysql);
+                echo (json_encode($books));
+            }
         break;
     
 }
