@@ -1,8 +1,8 @@
 REST application
 
-client:
-index.html - html on client side <br>
-js/scriptjs.js -  JavaScript  on client side
+browser:
+index.html - html file <br>
+js/scriptjs.js -  JavaScript with jQuery
 
 server:
 rest.php - PHP on server <br>
