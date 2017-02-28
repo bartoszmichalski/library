@@ -10,7 +10,7 @@ jQuery(function(){
         var books = JSON.parse(response);
         printTable (books);
         //get book
-        jQuery('body').on('a', 'click', function (event) {
+        jQuery('body').on( 'click', 'a', function (event) {
             jQuery('a').next().next().hide()
             jQuery(this).next().next().show();
             var id = jQuery(this).parent().attr('id');
