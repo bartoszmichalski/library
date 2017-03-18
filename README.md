@@ -1,10 +1,12 @@
-klient:
-index.html - html po stronie klienta
-js/scriptjs.js -  JS po stronie klienta
+REST application
 
-serwer:
-rest.php - obsługa po stronie PHP
-test.php - do testów na serwerze PHP
+browser:
+index.html - html file <br>
+js/scriptjs.js -  JavaScript with jQuery
+
+server:
+rest.php - PHP on server <br>
+test.php - PHP on server (for test purposes)
 
 
 
