@@ -100,7 +100,7 @@ class Book implements JsonSerializable {
             }
         return $books;    
         }
-      // var_dump($books);
+      
         return null;
         
     }
@@ -127,18 +127,12 @@ class Book implements JsonSerializable {
 
 }
 
-
-
-
-
-
-
 //header('Content-Type:application/json; charset=UTF-8');
 
 switch($_SERVER['REQUEST_METHOD']){
     
     case 'POST':
-         //   echo 'DODAWANIE POZYCJI';
+         //   add action
         if (isset($_POST['title']) && isset($_POST['author']) && $_POST['title']!='' && $_POST['author']!='') {
             $title=$_POST['title'];
             $author=$_POST['author'];
@@ -156,7 +150,8 @@ switch($_SERVER['REQUEST_METHOD']){
         break;
     
     case 'GET':
-            if(isset($_GET['id'])){   ///wczytywanie książki o podanym id
+            // get action
+            if(isset($_GET['id'])){   // load book by id
                 $loadedBook=Book::loadBookFromDBById($mysql,$_GET['id']);
                 echo json_encode($loadedBook);
             } else {
@@ -166,7 +161,7 @@ switch($_SERVER['REQUEST_METHOD']){
         break;
     
     case 'PUT':
-           // echo 'EDYCJA';
+           // edit action;
             parse_str(file_get_contents("php://input"), $put_vars);
             $id=$put_vars['id'];
             $loadedbook = Book::loadBookFromDBById ($mysql,$id);
@@ -179,7 +174,7 @@ switch($_SERVER['REQUEST_METHOD']){
         break;
         
     case 'DELETE':
-            //echo 'KASOWANIE';
+            //delete action;
             parse_str(file_get_contents("php://input"), $del_vars);
             $id=$del_vars['id'];
             $delbook = Book::loadBookFromDBById ($mysql,$id);
@@ -190,24 +185,6 @@ switch($_SERVER['REQUEST_METHOD']){
         break;
     
 }
-
-//
-//class BOOK1{
-//    public function getData(){
-//        
-//        $data=$_GET;
-//      
-//        $books = [ 
-//                    ['id'=>$data['id'], 'title'=>'Winetou 1', 'author'=>'Mark Twain'],
-//                    ['id'=>$data['id'], 'title'=>'Winetou 2', 'author'=>'Mark Twain'],
-//                    ['id'=>$data['id'], 'title'=>'Winetou 3', 'author'=>'Mark Twain'],
-//                    ['id'=>$data['id'], 'title'=>'Winetou 4', 'author'=>'Mark Twain'],
-//                 ];
-//        return $books;
-//    }
-//    
-//}
-//
 
 
 
